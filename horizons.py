@@ -35,7 +35,14 @@ class HorizonsRequest:
 			"CSV_FORMAT": "YES"
 		}
 		self.response = []
+		self.dictionary = {}
 	
+	def set_key(self, key, value):
+		self.keys[key] = str(value)
+
+	def delete_key(self, key):
+		self.keys.pop(key, None)	
+
 	def send(self):
 		# create request
 		request = "https://ssd.jpl.nasa.gov/horizons_batch.cgi?batch=1"
@@ -46,6 +53,26 @@ class HorizonsRequest:
 		file = urllib.request.urlopen(request)
 		for line in file:
 			self.response.append(line.decode('utf-8').replace('\n', ''))
+
+	def get_dictionary(self):
+		keys = []
+		values = []	
+
+		# locate data position in response
+		i = 0
+		while i < len(self.response):
+			if "$$SOE" in self.response[i]:
+				keys = self.response[i - 2].split(",")
+				values = self.response[i + 1].split(",")
+			i += 1
+
+		# create dictionary
+		i = 0
+		while i < len(keys):
+			self.dictionary[keys[i].strip()] = values[i].strip()
+			i += 1
+
+		return self.dictionary
 
 	def get_response(self):
 		return self.response

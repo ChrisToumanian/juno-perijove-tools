@@ -11,5 +11,10 @@ request.send()
 
 response = request.get_response()
 
-for line in response:
-	print(line)
+# for line in response:
+#	print(line)
+
+dictionary = request.get_dictionary()
+
+for key in dictionary:
+	print(key, ":", dictionary[key])
