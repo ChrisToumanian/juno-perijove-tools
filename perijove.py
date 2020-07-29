@@ -66,7 +66,7 @@ def show_perijove_times():
 	print(datetime_pst.strftime('%Y-%m-%d %H:%M:%S'), "PST")
 
 def main():
-	print("JUNO Perijove Dates from naif.jpl.nasa.gov/pub/naif/JUNO/kernels/spk/juno_pred_orbit.orb\n")
+	print("JUNO Perijove Dates from", naif_orbit_url,"\n")
 
 	# perijove dates
 	get_predicted_orbit()
