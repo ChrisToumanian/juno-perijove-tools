@@ -6,17 +6,14 @@ import math
 from datetime import datetime, timedelta
 import horizons
 
-# JPL NAIF predicted orbit
 naif_orbit_url = "https://naif.jpl.nasa.gov/pub/naif/JUNO/kernels/spk/juno_pred_orbit.orb"
 predicted_orbit = []
 selected_line = 1
-
-# data
-horizons_dictionary = {}
-datetime_initial = None
+ephemerides_dict = {}
 one_way_lt = 0
 pdt_compensation = -7
 pst_compensation = -8
+datetime_initial = None
 datetime_adjusted = None
 datetime_pdt = None
 datetime_pst = None
@@ -27,7 +24,7 @@ def get_predicted_orbit():
 	for line in file:
 		predicted_orbit.append(line.decode('utf-8').replace('\n', ''))
 
-def select_date():
+def select_perijove():
 	global selected_line
 	global predicted_orbit
 	global datetime_initial
@@ -37,23 +34,23 @@ def select_date():
 	datetime_initial = datetime.strptime(predicted_orbit[selected_line][51:71], '%Y %b %d %H:%M:%S')
 	print("You selected:", line_str)
 
-def get_horizons_data():
+def get_ephemerides():
 	global datetime_initial
-	global horizons_dictionary
+	global ephemerides_dict
 
 	# horizons request
 	request = horizons.HorizonsRequest("672@399", "599", datetime_initial, "2,20,21")
 	request.send()
-	horizons_dictionary = request.get_dictionary()
+	ephemerides_dict = request.get_dictionary()
 
-def get_ephemerides():
+def show_perijove_times():
 	global datetime_initial
-	global horizons_dictionary
+	global ephemerides_dict
 
 	print("")
 
 	# obtain one-way LT from horizons_dictionary
-	one_way_lt = float(horizons_dictionary["1-way_down_LT"])
+	one_way_lt = float(ephemerides_dict["1-way_down_LT"])
 	print("One-way LT:", str(one_way_lt))
 	
 	# calculate datetimes adjusted for LT and timezone
@@ -76,13 +73,13 @@ def main():
 	for line in predicted_orbit:
 		print(line)
 
-	# select date 
-	select_date()
+	# select perijove 
+	select_perijove()
 
 	# fetch horizons data
-	get_horizons_data()
+	get_ephemerides()
 
 	# ephemerides
-	get_ephemerides()
+	show_perijove_times()
 	
 main()
