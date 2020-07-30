@@ -22,7 +22,7 @@ def get_julian_datetime(date):
 
 class HorizonsRequest:
 	def __init__(self, center, target, datetime, quantities):
-		self.keys = {
+		self.request_data = {
 			"CENTER": center,
 			"COMMAND": target,
 			"QUANTITIES": quantities,
@@ -38,7 +38,7 @@ class HorizonsRequest:
 		self.dictionary = {}
 	
 	def set_key(self, key, value):
-		self.keys[key] = str(value)
+		self.request_data[key] = str(value)
 
 	def delete_key(self, key):
 		self.keys.pop(key, None)	
@@ -46,8 +46,8 @@ class HorizonsRequest:
 	def send(self):
 		# create request
 		request = "https://ssd.jpl.nasa.gov/horizons_batch.cgi?batch=1"
-		for key in self.keys:
-			request += "&" + key + "='" + self.keys[key] + "'"
+		for key in self.request_data:
+			request += "&" + key + "='" + self.request_data[key] + "'"
 
 		# send request
 		file = urllib.request.urlopen(request)
