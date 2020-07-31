@@ -9,7 +9,7 @@ def draw_menu(stdscr):
 	k = 0
 
 	# Declaration of strings
-	title = "JUNO Dashboard"
+	title = "JUNO DASHBOARD"
 	statusbarstr = "Press 'q' to exit. Press any key to update."
 
 	# Clear and refresh screen
@@ -74,14 +74,14 @@ def draw_menu(stdscr):
 
 		# Render Jupiter data
 		stdscr.addstr(center_y, center_x + 2, "JUPITER", curses.color_pair(1))	
-		stdscr.addstr(8, 1, "JUPITER", curses.color_pair(1))	
+		stdscr.addstr(8, 1, "JUPITER")	
 		stdscr.addstr(9, 1, "Apparent Azi/Elev: " + jupiter_data["Azi_(a-app)"] + "," + juno_data["Elev_(a-app)"], curses.color_pair(1))
 		stdscr.addstr(10, 1, "Distance (km): " + jupiter_data["delta"], curses.color_pair(1))
 		stdscr.addstr(11, 1, "1-way LT (min): " + jupiter_data["1-way_down_LT"], curses.color_pair(1))
 
 		# Render Juno data
 		stdscr.addstr(juno_pos_y, juno_pos_x + 2, "JUNO", curses.color_pair(1))
-		stdscr.addstr(2, 1, "JUNO", curses.color_pair(1))	
+		stdscr.addstr(2, 1, "JUNO")	
 		stdscr.addstr(3, 1, "Apparent Azi/Elev: " + juno_data["Azi_(a-app)"] + "," + juno_data["Elev_(a-app)"], curses.color_pair(1))
 		stdscr.addstr(4, 1, "Distance (km): " + juno_data["delta"], curses.color_pair(1))
 		stdscr.addstr(5, 1, "1-way LT (min): " + juno_data["1-way_down_LT"], curses.color_pair(1))
