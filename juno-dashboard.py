@@ -68,14 +68,16 @@ def draw_menu(stdscr):
 		stdscr.addstr(center_y - 10, center_x - 30, "\u250F")
 
 		# Render Juno
-		juno_pos_x = center_x + 8
-		juno_pos_y = center_y + 5
+		juno_offset_deg_x = float(juno_data["Azi_(a-app)"]) - float(jupiter_data["Azi_(a-app)"])
+		juno_offset_deg_y = float(juno_data["Elev_(a-app)"]) - float(jupiter_data["Elev_(a-app)"])
+		juno_pos_x = center_x + int(juno_offset_deg_x * 10)
+		juno_pos_y = center_y - int(juno_offset_deg_y * 10)
 		stdscr.addstr(juno_pos_y, juno_pos_x, "\u00A4")
 
 		# Render Jupiter data
 		stdscr.addstr(center_y, center_x + 2, "JUPITER", curses.color_pair(1))	
 		stdscr.addstr(8, 1, "JUPITER")	
-		stdscr.addstr(9, 1, "Apparent Azi/Elev: " + jupiter_data["Azi_(a-app)"] + "," + juno_data["Elev_(a-app)"], curses.color_pair(1))
+		stdscr.addstr(9, 1, "Apparent Azi/Elev: " + jupiter_data["Azi_(a-app)"] + "," + jupiter_data["Elev_(a-app)"], curses.color_pair(1))
 		stdscr.addstr(10, 1, "Distance (km): " + jupiter_data["delta"], curses.color_pair(1))
 		stdscr.addstr(11, 1, "1-way LT (min): " + jupiter_data["1-way_down_LT"], curses.color_pair(1))
 
