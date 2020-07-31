@@ -23,7 +23,6 @@ def draw_menu(stdscr):
 
 	# Clear and refresh screen
 	stdscr.clear()
-	stdscr.refresh()
 	curses.curs_set(0)
 
 	# Start colors in curses
@@ -61,7 +60,7 @@ def draw_menu(stdscr):
 		stdscr.addstr(height-1, width-15, "ZOOM: ")
 		stdscr.addstr(height-1, width-10, str(zoom))
 		stdscr.attroff(curses.color_pair(3))
-		stdscr.refresh()
+		#stdscr.refresh()
 
 		# Get updates from Horizons
 		date = datetime.utcnow()
