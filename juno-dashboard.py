@@ -7,6 +7,7 @@ import horizons
 
 def draw_menu(stdscr):
 	k = 0
+	zoom = 55
 
 	# Declaration of strings
 	title = "JUNO DASHBOARD"
@@ -25,6 +26,12 @@ def draw_menu(stdscr):
 
 	# Loop where k is the last character pressed
 	while (k != ord('q')):
+	
+		# Check zoom
+		if (k == ord('+')):
+			zoom += 10
+		elif (k == ord('-')):
+			zoom -= 10
 
 		# Initialization
 		stdscr.clear()
@@ -41,6 +48,8 @@ def draw_menu(stdscr):
 		stdscr.attron(curses.color_pair(3))
 		stdscr.addstr(height-1, 0, statusbarstr)
 		stdscr.addstr(height-1, len(statusbarstr), " " * (width - len(statusbarstr) - 1))
+		stdscr.addstr(height-1, width-10, "ZOOM: ")
+		stdscr.addstr(height-1, width-5, str(zoom))
 		stdscr.attroff(curses.color_pair(3))
 		stdscr.refresh()
 
@@ -49,9 +58,22 @@ def draw_menu(stdscr):
 		request = horizons.HorizonsRequest("672@399", "-61", date, "4,20,21")
 		request.send()
 		juno_data = request.get_dictionary()
+		
 		request = horizons.HorizonsRequest("672@399", "599", date, "4,20,21")
 		request.send()
 		jupiter_data = request.get_dictionary()
+	
+		request = horizons.HorizonsRequest("672@399", "501", date, "4")
+		request.send()
+		io_data = request.get_dictionary()
+	
+		request = horizons.HorizonsRequest("672@399", "502", date, "4")
+		request.send()
+		europa_data = request.get_dictionary()
+
+		request = horizons.HorizonsRequest("672@399", "503", date, "4")
+		request.send()
+		ganymede_data = request.get_dictionary()
 
 		# Render time
 		stdscr.addstr(0, width-len(juno_data["Date__(UT)__HR:MN:SC.fff"] + " (UTC)")-1, juno_data["Date__(UT)__HR:MN:SC.fff"] + " (UTC)")
@@ -61,18 +83,44 @@ def draw_menu(stdscr):
 		center_y = int(height // 2)
 		
 		# Render display Box
-		stdscr.addstr(center_y, center_x, "+")
-		stdscr.addstr(center_y + 10, center_x - 30, "\u2517")
-		stdscr.addstr(center_y - 10, center_x + 30, "\u2513")
-		stdscr.addstr(center_y + 10, center_x + 30, "\u251B")
-		stdscr.addstr(center_y - 10, center_x - 30, "\u250F")
+		stdscr.addstr(center_y + 15, center_x - 40, "\u2517")
+		stdscr.addstr(center_y - 15, center_x + 40, "\u2513")
+		stdscr.addstr(center_y + 15, center_x + 40, "\u251B")
+		stdscr.addstr(center_y - 15, center_x - 40, "\u250F")
+
+		# Render Ganymede
+		ganymede_offset_deg_x = float(ganymede_data["Azi_(a-app)"]) - float(jupiter_data["Azi_(a-app)"])
+		ganymede_offset_deg_y = float(ganymede_data["Elev_(a-app)"]) - float(jupiter_data["Elev_(a-app)"])
+		ganymede_pos_x = center_x + int(ganymede_offset_deg_x * zoom)
+		ganymede_pos_y = center_y - int(ganymede_offset_deg_y * zoom)
+		stdscr.addstr(ganymede_pos_y, ganymede_pos_x, "\u00B0")
+		stdscr.addstr(ganymede_pos_y, ganymede_pos_x + 2, "GANYMEDE", curses.color_pair(1))	
+
+		# Render Europa
+		europa_offset_deg_x = float(europa_data["Azi_(a-app)"]) - float(jupiter_data["Azi_(a-app)"])
+		europa_offset_deg_y = float(europa_data["Elev_(a-app)"]) - float(jupiter_data["Elev_(a-app)"])
+		europa_pos_x = center_x + int(europa_offset_deg_x * zoom)
+		europa_pos_y = center_y - int(europa_offset_deg_y * zoom)
+		stdscr.addstr(europa_pos_y, europa_pos_x, "\u00B0")
+		stdscr.addstr(europa_pos_y, europa_pos_x + 2, "EUROPA", curses.color_pair(1))	
+
+		# Render Io 
+		io_offset_deg_x = float(io_data["Azi_(a-app)"]) - float(jupiter_data["Azi_(a-app)"])
+		io_offset_deg_y = float(io_data["Elev_(a-app)"]) - float(jupiter_data["Elev_(a-app)"])
+		io_pos_x = center_x + int(io_offset_deg_x * zoom)
+		io_pos_y = center_y - int(io_offset_deg_y * zoom)
+		stdscr.addstr(io_pos_y, io_pos_x, "\u00B0")
+		stdscr.addstr(io_pos_y, io_pos_x + 2, "IO", curses.color_pair(1))	
+
+		# Render Jupiter
+		stdscr.addstr(center_y, center_x, "\u00A4")
 
 		# Render Juno
 		juno_offset_deg_x = float(juno_data["Azi_(a-app)"]) - float(jupiter_data["Azi_(a-app)"])
 		juno_offset_deg_y = float(juno_data["Elev_(a-app)"]) - float(jupiter_data["Elev_(a-app)"])
-		juno_pos_x = center_x + int(juno_offset_deg_x * 10)
-		juno_pos_y = center_y - int(juno_offset_deg_y * 10)
-		stdscr.addstr(juno_pos_y, juno_pos_x, "\u00A4")
+		juno_pos_x = center_x + int(juno_offset_deg_x * zoom)
+		juno_pos_y = center_y - int(juno_offset_deg_y * zoom)
+		stdscr.addstr(juno_pos_y, juno_pos_x, "Y")
 
 		# Render Jupiter data
 		stdscr.addstr(center_y, center_x + 2, "JUPITER", curses.color_pair(1))	
@@ -88,6 +136,12 @@ def draw_menu(stdscr):
 		stdscr.addstr(4, 1, "Distance (km): " + juno_data["delta"], curses.color_pair(1))
 		stdscr.addstr(5, 1, "1-way LT (min): " + juno_data["1-way_down_LT"], curses.color_pair(1))
 
+		# Render moon data
+		stdscr.addstr(14, 1, "MOONS")
+		stdscr.addstr(15, 1, "IO: " + io_data["Azi_(a-app)"] + "," + io_data["Elev_(a-app)"], curses.color_pair(1))
+		stdscr.addstr(16, 1, "EUROPA: " + europa_data["Azi_(a-app)"] + "," + europa_data["Elev_(a-app)"], curses.color_pair(1))
+		stdscr.addstr(17, 1, "GANYMEDE: " + ganymede_data["Azi_(a-app)"] + "," + ganymede_data["Elev_(a-app)"], curses.color_pair(1))
+		
 		# Refresh screen
 		stdscr.refresh()
 
