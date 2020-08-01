@@ -5,22 +5,15 @@ import curses
 from datetime import datetime, timedelta
 import system
 
-def limit_pos(pos, maximum):
-	if (pos > maximum):
-		pos = maximum - 10
-	elif (pos < 1):
-		pos = 4
-	return pos
-
 def draw_menu(stdscr):
 	k = 0
 	zoom = 55
 	lt_minutes = 0
-	selected_object = "Jupiter"
+	selected_object = 0
 
 	# Declaration of strings
 	title = "JUNO DASHBOARD"
-	statusbarstr = " Press 'q' to exit | Press 'u' to update | +/- to zoom"
+	statusbarstr = " Press 'q' to exit | Press 'u' to update | Press 'n' for next object | +/- to zoom"
 
 	# Clear and refresh screen
 	stdscr.clear()
@@ -48,7 +41,13 @@ def draw_menu(stdscr):
 
 	# Loop where k is the last character pressed
 	while (k != ord('q')):
-	
+
+		# Select next object
+		if (k == ord('n')):
+			selected_object += 1
+			if (selected_object == len(sol_system.objects)):
+				selected_object = 0
+
 		# Check zoom
 		if (k == ord('+')):
 			zoom *= 1.5
@@ -56,6 +55,8 @@ def draw_menu(stdscr):
 		elif (k == ord('-')):
 			zoom *= 0.75
 			zoom = int(zoom)
+		if (zoom < 2):
+			zoom = 2
 
 		# Initialization
 		stdscr.clear()
@@ -102,21 +103,22 @@ def draw_menu(stdscr):
 		for obj in sol_system.objects:
 			offset_deg_x = float(obj.get_value("Azi_(a-app)")) - float(jupiter.get_value("Azi_(a-app)"))
 			offset_deg_y = float(obj.get_value("Elev_(a-app)")) - float(jupiter.get_value("Elev_(a-app)"))
-			pos_x = limit_pos(center_x + int(offset_deg_x * zoom), width)
-			pos_y = limit_pos(center_y - int(offset_deg_y * (zoom / 2)), height)
-			stdscr.addstr(pos_y, pos_x, obj.symbol)
-			stdscr.addstr(pos_y, pos_x + 2, obj.name, curses.color_pair(1))
+			pos_x = center_x + int(offset_deg_x * zoom)
+			pos_y = center_y - int(offset_deg_y * (zoom / 2))
+			if (pos_x > 0 and pos_x < width - len(obj.name) - 1 and pos_y > 0 and pos_y < height - 1):
+				stdscr.addstr(pos_y, pos_x, obj.symbol)
+				stdscr.addstr(pos_y, pos_x + 2, obj.name, curses.color_pair(1))
 
 		# Render Jupiter
 		stdscr.addstr(center_y, center_x, jupiter.symbol)
 		stdscr.addstr(center_y, center_x + 2, jupiter.name, curses.color_pair(1))	
 
 		# Render selected object data
-		obj = sol_system.get_object(selected_object)
-		stdscr.addstr(8, 1, obj.name)	
-		stdscr.addstr(9, 1, "Apparent Azi/Elev: " + obj.get_value("Azi_(a-app)") + "," + obj.get_value("Elev_(a-app)"), curses.color_pair(1))
-		stdscr.addstr(10, 1, "Distance (km): " + obj.get_value("delta"), curses.color_pair(1))
-		stdscr.addstr(11, 1, "1-way LT (min): " + obj.get_value("1-way_down_LT"), curses.color_pair(1))
+		obj = sol_system.objects[selected_object]
+		stdscr.addstr(2, 1, obj.name)	
+		stdscr.addstr(3, 1, "Apparent Azi/Elev: " + obj.get_value("Azi_(a-app)") + "," + obj.get_value("Elev_(a-app)"), curses.color_pair(1))
+		stdscr.addstr(4, 1, "Distance (km): " + obj.get_value("delta"), curses.color_pair(1))
+		stdscr.addstr(5, 1, "1-way LT (min): " + obj.get_value("1-way_down_LT"), curses.color_pair(1))
 
 		# Refresh screen
 		stdscr.refresh()
