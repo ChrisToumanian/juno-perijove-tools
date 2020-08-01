@@ -65,10 +65,10 @@ def draw_menu(stdscr):
 		if (k == ord('+')):
 			if (zoom == 1):
 				zoom = 0
-			zoom += 10
+			zoom += 20
 			zoom = int(zoom)
 		elif (k == ord('-')):
-			zoom -= 10
+			zoom -= 20
 			zoom = int(zoom)
 		if (zoom < 1):
 			zoom = 1
@@ -112,6 +112,17 @@ def draw_menu(stdscr):
 		stdscr.addstr(height - 4, width - 8, "\u251B") # lower-right
 		stdscr.addstr(3, 6, "\u250F") # upper-left
 		stdscr.addstr(height - 3, 6, str(zoom) + "x (chars/deg)")
+
+		# Render jupiter bounds
+		jupiter_radius = zoom / 100 / 2
+		stdscr.addstr(center_y, center_x + int(jupiter_radius), "*") # right
+		stdscr.addstr(center_y, center_x - int(jupiter_radius), "*") # left
+		stdscr.addstr(center_y + int(jupiter_radius / 2), center_x, "*") # down
+		stdscr.addstr(center_y - int(jupiter_radius / 2), center_x, "*") # up
+		stdscr.addstr(center_y - int(jupiter_radius * 0.71 / 2), center_x + int(jupiter_radius * 0.71), "*") # upper-right
+		stdscr.addstr(center_y - int(jupiter_radius * 0.71 / 2), center_x - int(jupiter_radius * 0.71), "*") # upper-left
+		stdscr.addstr(center_y + int(jupiter_radius * 0.71 / 2), center_x + int(jupiter_radius * 0.71), "*") # lower-right
+		stdscr.addstr(center_y + int(jupiter_radius * 0.71 / 2), center_x - int(jupiter_radius * 0.71), "*") # lower-left
 
 		# Render objects
 		for obj in sol_system.objects:
