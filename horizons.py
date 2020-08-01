@@ -78,3 +78,4 @@ class HorizonsRequest:
 
 	def get_response(self):
 		return self.response
+
