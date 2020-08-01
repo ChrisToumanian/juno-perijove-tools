@@ -36,7 +36,7 @@ def draw_menu(stdscr):
 	sol_system.add_object("Juno", "-61", "4,20,21", "Y")
 
 	# Object notes
-	sol_system.get_object("Juno").notes = "Launch: Aug 5, 2011 16:25 UTC\nEarth Flyby: Oct 9, 2013 19:21:25 UTC\nArrive Jupiter: Jul 5, 2016 02:30 UTC\nDimensions: 20m\n\nSolar-powered, spin-stabilized spacecraft\nThree 2x9m solar panels around hexagonal bus\nGravity/radio science system\nSix-wavelength microwave radiometer\nVector magnetometer\nPlasma and energetic particle detectors\nRadio/plasma wave experiment\nUltraviolet imager/spectrometer\nInfrared imager/spectrometer"
+	sol_system.get_object("Juno").notes = "Launch: Aug 5, 2011 16:25 UTC\nEarth Flyby: Oct 9, 2013 19:21:25 UTC\nArrive Jupiter: Jul 5, 2016 02:30 UTC\nDimensions: 20m\nSolar-powered, spin-stabilized spacecraft\nThree 2x9m solar panels around hexagonal bus\nGravity/radio science system\nSix-wavelength microwave radiometer\nVector magnetometer\nPlasma and energetic particle detectors\nRadio/plasma wave experiment\nUltraviolet imager/spectrometer\nInfrared imager/spectrometer\nBipropellant engine\nRCS thrusters"
 
 	# First update
 	sol_system.set_datetime_utc(datetime.utcnow() - timedelta(minutes = lt_minutes))
@@ -98,10 +98,10 @@ def draw_menu(stdscr):
 		center_y = int(height // 2)
 		
 		# Render display Box
-		stdscr.addstr(center_y + 15, center_x - 40, "\u2517")
-		stdscr.addstr(center_y - 15, center_x + 40, "\u2513")
-		stdscr.addstr(center_y + 15, center_x + 40, "\u251B")
-		stdscr.addstr(center_y - 15, center_x - 40, "\u250F")
+		stdscr.addstr(height - 5, 8, "\u2517") # lower-left
+		stdscr.addstr(5, width - 8, "\u2513") # upper-right
+		stdscr.addstr(height - 5, width - 8, "\u251B") # lower-right
+		stdscr.addstr(5, 8, "\u250F") # upper-left
 
 		# Render objects
 		for obj in sol_system.objects:
