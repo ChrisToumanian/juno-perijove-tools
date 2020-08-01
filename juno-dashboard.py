@@ -39,7 +39,7 @@ def draw_menu(stdscr):
 	sol_system.get_object("Juno").notes = "Launch: Aug 5, 2011 16:25 UTC\nEarth Flyby: Oct 9, 2013 19:21:25 UTC\nArrive Jupiter: Jul 5, 2016 02:30 UTC\nDimensions: 20m\nSolar-powered, spin-stabilized spacecraft\nThree 2x9m solar panels around hexagonal bus\nGravity/radio science system\nSix-wavelength microwave radiometer\nVector magnetometer\nPlasma and energetic particle detectors\nRadio/plasma wave experiment\nUltraviolet imager/spectrometer\nInfrared imager/spectrometer\nBipropellant engine\nRCS thrusters"
 
 	# First update
-	sol_system.set_datetime_utc(datetime.utcnow() - timedelta(minutes = lt_minutes))
+	sol_system.set_datetime_utc(datetime.utcnow())
 	sol_system.update()
 	jupiter = sol_system.get_object("Jupiter")
 
@@ -89,7 +89,7 @@ def draw_menu(stdscr):
 		# Render time
 		date = jupiter.get_value("Date__(UT)__HR:MN:SC.fff")
 		lt = jupiter.get_value("1-way_down_LT")
-		stdscr.addstr(0, width-len(date + " (UTC)")-1, lt + " (UTC)")
+		stdscr.addstr(0, width-len(date + " (UTC)")-1, date + " (UTC)")
 		if (lt_minutes == 0):
 			lt_minutes = float(lt)
 	
