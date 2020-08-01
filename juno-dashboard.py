@@ -7,7 +7,7 @@ import system
 
 def draw_menu(stdscr):
 	k = 0
-	zoom = 55
+	zoom = 200
 	lt_minutes = 0
 	selected_object = 4
 
@@ -54,13 +54,15 @@ def draw_menu(stdscr):
 
 		# Check zoom
 		if (k == ord('+')):
-			zoom *= 1.5
+			if (zoom == 1):
+				zoom = 0
+			zoom += 10
 			zoom = int(zoom)
 		elif (k == ord('-')):
-			zoom *= 0.75
+			zoom -= 10
 			zoom = int(zoom)
-		if (zoom < 2):
-			zoom = 2
+		if (zoom < 1):
+			zoom = 1
 
 		# Initialization
 		stdscr.clear()
@@ -77,8 +79,6 @@ def draw_menu(stdscr):
 		stdscr.attron(curses.color_pair(3))
 		stdscr.addstr(height-1, 0, statusbarstr)
 		stdscr.addstr(height-1, len(statusbarstr), " " * (width - len(statusbarstr) - 1))
-		stdscr.addstr(height-1, width-15, "ZOOM: ")
-		stdscr.addstr(height-1, width-10, str(zoom))
 		stdscr.attroff(curses.color_pair(3))
 
 		# Update system
@@ -98,10 +98,11 @@ def draw_menu(stdscr):
 		center_y = int(height // 2)
 		
 		# Render display Box
-		stdscr.addstr(height - 5, 8, "\u2517") # lower-left
-		stdscr.addstr(5, width - 8, "\u2513") # upper-right
-		stdscr.addstr(height - 5, width - 8, "\u251B") # lower-right
-		stdscr.addstr(5, 8, "\u250F") # upper-left
+		stdscr.addstr(height - 4, 6, "\u2517") # lower-left
+		stdscr.addstr(3, width - 6, "\u2513") # upper-right
+		stdscr.addstr(height - 4, width - 8, "\u251B") # lower-right
+		stdscr.addstr(3, 6, "\u250F") # upper-left
+		stdscr.addstr(height - 3, 6, str(zoom) + "x (chars/deg)")
 
 		# Render objects
 		for obj in sol_system.objects:
@@ -109,7 +110,7 @@ def draw_menu(stdscr):
 			offset_deg_y = float(obj.get_value("Elev_(a-app)")) - float(jupiter.get_value("Elev_(a-app)"))
 			pos_x = center_x + int(offset_deg_x * zoom)
 			pos_y = center_y - int(offset_deg_y * (zoom / 2))
-			if (pos_x > 0 and pos_x < width - len(obj.name) - 1 and pos_y > 0 and pos_y < height - 1):
+			if (pos_x > 3 and pos_x < width - len(obj.name) - 3 and pos_y > 3 and pos_y < height - 3):
 				stdscr.addstr(pos_y, pos_x, obj.symbol)
 				if (sol_system.objects[selected_object].name == obj.name):
 					stdscr.addstr(pos_y, pos_x + 2, obj.name.upper(), curses.color_pair(4))
