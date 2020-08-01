@@ -112,9 +112,9 @@ def draw_menu(stdscr):
 			if (pos_x > 0 and pos_x < width - len(obj.name) - 1 and pos_y > 0 and pos_y < height - 1):
 				stdscr.addstr(pos_y, pos_x, obj.symbol)
 				if (sol_system.objects[selected_object].name == obj.name):
-					stdscr.addstr(pos_y, pos_x + 2, obj.name, curses.color_pair(4))
+					stdscr.addstr(pos_y, pos_x + 2, obj.name.upper(), curses.color_pair(4))
 				else:
-					stdscr.addstr(pos_y, pos_x + 2, obj.name, curses.color_pair(1))
+					stdscr.addstr(pos_y, pos_x + 2, obj.name.upper(), curses.color_pair(1))
 
 		# Render selected object data
 		obj = sol_system.objects[selected_object]
@@ -122,7 +122,10 @@ def draw_menu(stdscr):
 		stdscr.addstr(3, 0, "Apparent Azi/Elev: " + obj.get_value("Azi_(a-app)") + "," + obj.get_value("Elev_(a-app)"), curses.color_pair(1))
 		stdscr.addstr(4, 0, "Distance (km): " + obj.get_value("delta"), curses.color_pair(1))
 		stdscr.addstr(5, 0, "1-way LT (min): " + obj.get_value("1-way_down_LT"), curses.color_pair(1))
-		stdscr.addstr(7, 0, obj.notes, curses.color_pair(1))
+		stdscr.addstr(8, 0, obj.notes, curses.color_pair(1))
+		
+		z_distance = float(obj.get_value("delta")) - float(jupiter.get_value("delta"))
+		stdscr.addstr(6, 0, "Z-distance from Jupiter (km): " + str(z_distance), curses.color_pair(1))
 
 		# Refresh screen
 		stdscr.refresh()
