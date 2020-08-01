@@ -32,6 +32,7 @@ def draw_menu(stdscr):
 	sol_system.add_object("Io", "501", "4,20,21", "\u00B0")
 	sol_system.add_object("Europa", "502", "4,20,21", "\u00B0")
 	sol_system.add_object("Ganymede", "503", "4,20,21", "\u00B0")
+	sol_system.add_object("Callisto", "504", "4,20,21", "\u00B0")
 	sol_system.add_object("Jupiter", "599", "4,20,21", "\u00A4")
 	sol_system.add_object("Juno", "-61", "4,20,21", "Y")
 
