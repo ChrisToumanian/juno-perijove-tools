@@ -10,10 +10,11 @@ def draw_menu(stdscr):
 	zoom = 200
 	lt_minutes = 0
 	selected_object = 4
+	show_info = True
 
 	# Declaration of strings
 	title = "JUNO DASHBOARD"
-	statusbarstr = " Press 'q' to exit | Press 'u' to update | Press 'n' for next object | +/- to zoom"
+	statusbarstr = " q: exit     u: update     n: next object     i: toggle info     +/-: zoom"
 
 	# Clear and refresh screen
 	stdscr.clear()
@@ -47,13 +48,20 @@ def draw_menu(stdscr):
 	# Loop where k is the last character pressed
 	while (k != ord('q')):
 
-		# Select next object
+		# Check select next object key
 		if (k == ord('n')):
 			selected_object += 1
 			if (selected_object == len(sol_system.objects)):
 				selected_object = 0
 
-		# Check zoom
+		# Check info toggle key
+		if (k == ord('i')):
+			if (show_info):
+				show_info = False
+			elif (not show_info):
+				show_info = True
+
+		# Check zoom key
 		if (k == ord('+')):
 			if (zoom == 1):
 				zoom = 0
@@ -127,7 +135,10 @@ def draw_menu(stdscr):
 		stdscr.addstr(4, 0, "Distance: " + obj.get_value("delta") + " km", curses.color_pair(1))
 		stdscr.addstr(5, 0, "1-way LT: " + obj.get_value("1-way_down_LT") + " min", curses.color_pair(1))
 		stdscr.addstr(6, 0, "Z-distance from Jupiter: " + str(z_distance) + " km", curses.color_pair(1))
-		stdscr.addstr(8, 0, obj.notes, curses.color_pair(1))
+		
+		# Extra info
+		if (show_info):
+			stdscr.addstr(8, 0, obj.notes, curses.color_pair(1))
 		
 		# Refresh screen
 		stdscr.refresh()
