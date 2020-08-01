@@ -12,6 +12,7 @@ class Object:
 		self.quantities = quantities
 		self.symbol = symbol
 		self.data = {}
+		self.notes = ""
 
 	def get_value(self, key):
 		for entry in self.data:
