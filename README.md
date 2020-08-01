@@ -1,8 +1,6 @@
 # Juno Perijove Tools
 A selection of tools to help with Jovian observations during the Juno orbiter's perijoves.
 
-![Dashboard screenshot](dashboard-screenshot.jpg)
-
 # Installation and Requirements
 Juno Perijove Tools works with Python 3 and later.
 
