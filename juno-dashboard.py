@@ -8,7 +8,6 @@ import system
 def draw_menu(stdscr):
 	k = 0
 	zoom = 200
-	lt_minutes = 0
 	selected_object = 4
 	show_info = True
 
@@ -92,15 +91,13 @@ def draw_menu(stdscr):
 
 		# Update system
 		if (k == ord('u')):
-			sol_system.set_datetime_utc(datetime.utcnow() - timedelta(minutes = lt_minutes))
+			sol_system.set_datetime_utc(datetime.utcnow())
 			sol_system.update()
 
 		# Render time
 		date = jupiter.get_value("Date__(UT)__HR:MN:SC.fff")
 		lt = jupiter.get_value("1-way_down_LT")
 		stdscr.addstr(0, width-len(date + " (UTC)")-1, date + " (UTC)")
-		if (lt_minutes == 0):
-			lt_minutes = float(lt)
 	
 		# Center calculation
 		center_x = int(width // 2)
