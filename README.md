@@ -6,7 +6,7 @@ A selection of tools to help with Jovian observations during the Juno orbiter's 
 # Installation and Requirements
 Juno Perijove Tools works with Python 3 and later. Juno dashboard requires the python module curses to run. If it is not installed use the coomand:
 
-pip install curses
+'''pip install curses'''
 
 # Using Juno Perijove Tools
 Juno-dashboard.py shows the live position of Juno in relation to Jupiter and its moons.
