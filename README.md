@@ -4,7 +4,7 @@ A selection of tools to help with Jovian observations during the Juno orbiter's 
 ![Dashboard screenshot](dashboard-screenshot.jpg)
 
 # Installation and Requirements
-Juno Perijove Tools works with Python 3 and later. Juno dashboard requires the python module curses to run. If it is not installed use the coomand:
+Juno Perijove Tools works with Python 3 and later. Juno dashboard requires the python module curses to run. If it is not installed run this command:
 
 ```pip install curses```
 
